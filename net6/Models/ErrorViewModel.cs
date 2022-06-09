@@ -1,4 +1,4 @@
-namespace net6.Models;
+namespace Net6.Models;
 
 public class ErrorViewModel
 {

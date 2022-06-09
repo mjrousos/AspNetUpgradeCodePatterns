@@ -1,24 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
-namespace netfx.Controllers
+namespace Netfx.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
-        {
-            return View();
-        }
+        public ActionResult Index() => View();
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
+        // #275 AuthorizeAttribute namespace
+        [Authorize]
+        public ActionResult UserInfo() => View();
 
         public ActionResult Contact()
         {
