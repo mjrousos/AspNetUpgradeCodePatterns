@@ -1,7 +1,8 @@
 ﻿using DemoApp.Models;
 using DemoApp.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Web.Mvc;
 
 namespace DemoApp.Controllers
 {
@@ -26,7 +27,7 @@ namespace DemoApp.Controllers
             if (id is null)
             {
                 // #672 StatusCodeResult
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new StatusCodeResult((int)HttpStatusCode.BadRequest);
             }
 
             var widget = _service.GetWidget(id.Value, HttpContext);
@@ -34,7 +35,7 @@ namespace DemoApp.Controllers
             if (widget is null)
             {
                 // #660 HttpNotFound
-                return HttpNotFound();
+                return NotFound();
             }
 
             return View(widget);
@@ -52,7 +53,7 @@ namespace DemoApp.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         // #673 BindAttribute (Include)
-        public ActionResult Create([Bind(Include = "Name,Price")] Widget widget)
+        public ActionResult Create([Bind("Name", "Price")] Widget widget)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +70,7 @@ namespace DemoApp.Controllers
             if (id is null)
             {
                 // #672 StatusCodeResult
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new StatusCodeResult((int)HttpStatusCode.BadRequest);
             }
 
             var widget = _service.GetWidget(id.Value, HttpContext);
@@ -77,7 +78,7 @@ namespace DemoApp.Controllers
             if (widget is null)
             {
                 // #660 HttpNotFound
-                return HttpNotFound();
+                return NotFound();
             }
 
             return View(widget);
@@ -88,14 +89,16 @@ namespace DemoApp.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         // #682 BindAttribute (Exclude)
-        public ActionResult Edit(int id, [Bind(Exclude = "Id,AdminOnly")] Widget updatedWidget)
+        public async Task<ActionResult> Edit(int id, [Bind("Name", "Price")] Widget updatedWidget)
         {
             if (ModelState.IsValid)
             {
                 var widget = _service.GetWidget(id, HttpContext);
 
                 // #684 TryUpdateModel
-                TryUpdateModel(widget, new[] { "Name", "Price" });
+                // This is a useful transformaion, but if it's too complicated, just transforming overloads that don't specify property names
+                // would also be useful.
+                await TryUpdateModelAsync(widget, string.Empty, w => w.Name, w => w.Price);
 
                 _service.UpdateWidget(widget, HttpContext);
                 return RedirectToAction("Index");
@@ -111,7 +114,7 @@ namespace DemoApp.Controllers
             if (id is null)
             {
                 // #672 StatusCodeResult
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new StatusCodeResult((int)HttpStatusCode.BadRequest);
             }
 
             var widget = _service.GetWidget(id.Value, HttpContext);
@@ -119,7 +122,7 @@ namespace DemoApp.Controllers
             if (widget is null)
             {
                 // #660 HttpNotFound
-                return HttpNotFound();
+                return NotFound();
             }
 
             return View(widget);
@@ -130,11 +133,11 @@ namespace DemoApp.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         // #683 FormCollection
-        public ActionResult DeleteConfirmed(int id, FormCollection collection)
+        public ActionResult DeleteConfirmed(int id, IFormCollection collection)
         {
             if (!_service.DeleteWidget(id, HttpContext))
             {
-                return HttpNotFound();
+                return NotFound();
             }
 
             return RedirectToAction("Index");

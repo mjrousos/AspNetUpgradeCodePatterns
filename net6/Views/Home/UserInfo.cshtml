@@ -1,0 +1,16 @@
+﻿@model DemoApp.Models.UserInfo
+
+@{
+    ViewBag.Title = "User Information";
+}
+
+<h1>User Info</h1>
+<h2>Name: @Model.UserName</h2>
+<ul>
+    <li>ID: @Model.UniqueId</li>
+    <li>User agent: @Model.UserAgent</li>
+    <li>Times visiting this page this session: @Model.IncrementCount</li>
+    <li>URL used to access this page: @Model.CurrentUrl</li>
+</ul>
+<h2>Profile picture</h2>
+@Html.ProfilePicture(Model.ProfilePictureUrl, Model.UserName, new {border="2px"})

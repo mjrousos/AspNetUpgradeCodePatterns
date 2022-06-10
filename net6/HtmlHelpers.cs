@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace Net6
+namespace DemoApp
 {
     public static class HtmlHelpers
     {
         // #1158 IHtmlString
-        public static IHtmlContent ProfilePicture(this HtmlHelper helper, string url, string userName, object htmlAttributes = null)
+        public static IHtmlContent ProfilePicture(this IHtmlHelper helper, string url, string userName, object htmlAttributes = null)
         {
             // #73 TagBuilder
             var builder = new TagBuilder("img");

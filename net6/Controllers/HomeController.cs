@@ -1,7 +1,8 @@
 ﻿using DemoApp.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Web;
-using System.Web.Mvc;
 
 namespace DemoApp.Controllers
 {
@@ -16,37 +17,39 @@ namespace DemoApp.Controllers
             return View();
         }
 
-        // #275 AuthorizeAttribute namespace
+        // #275 AuthorizeAttribute namespace (now comes from Microsoft.AspNetCore.Authorization)
         [Authorize]
         public ActionResult UserInfo()
         {
             // #679 Session
-            var count = (Session["Counter"] is int previousCount
+            // NOTE : This also requires adding Session services and middleware in program.cs
+            var count = (HttpContext.Session.GetInt32("Counter") is int previousCount
                 ? previousCount
                 : 0) + 1;
 
             // #679 Session
-            Session["Counter"] = count;
+            HttpContext.Session.SetInt32("Counter", count);
 
             // #495 HttpCookieCollection
             var idCookie = Request.Cookies["UniqueId"];
-            var id = idCookie?.Value;
+            var id = idCookie;
             if (id is null)
             {
                 id = Guid.NewGuid().ToString();
 
                 // #495 HttpCookieCollection
                 // #496 HttpCookie
-                Response.Cookies.Add(new HttpCookie("UniqueId", id));
+                Response.Cookies.Append("UniqueId", id);
             }
 
             return View(new UserInfo
             {
                 // #676 UserAgent
-                UserAgent = Request.UserAgent,
+                UserAgent = Request.Headers["User-Agent"].ToString(),
 
                 // #677 RawUrl
-                CurrentUrl = Request.RawUrl,
+                // This one's a bit tricky because we may often want GetEncodedUrl depending on the scenario
+                CurrentUrl = Request.GetDisplayUrl(),
 
                 UserName = User.Identity.Name,
                 IncrementCount = count,
@@ -57,6 +60,6 @@ namespace DemoApp.Controllers
 
         private string GetProfilePictureUrl(string name) =>
             // #1159 HttpRequest.Url.Scheme
-            Url.RouteUrl(ProfilePictureController.ProfilePictureRouteName, new { userName = name.ToLowerInvariant() }, Request.Url.Scheme);
+            Url.RouteUrl(ProfilePictureController.ProfilePictureRouteName, new { userName = name.ToLowerInvariant() }, Request.Scheme);
     }
 }
