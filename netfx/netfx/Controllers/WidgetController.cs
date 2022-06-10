@@ -88,15 +88,20 @@ namespace Netfx.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         // #682 BindAttribute (Exclude)
-        public ActionResult Edit(int id, [Bind(Exclude = "Id")] Widget widget)
+        public ActionResult Edit(int id, [Bind(Exclude = "Id,AdminOnly")] Widget updatedWidget)
         {
             if (ModelState.IsValid)
             {
+                var widget = _service.GetWidget(id, HttpContext);
+
+                // #684 TryUpdateModel
+                TryUpdateModel(widget, new[] { "Name", "Price" });
+
                 _service.UpdateWidget(widget, HttpContext);
                 return RedirectToAction("Index");
             }
 
-            return View(widget);
+            return View(updatedWidget);
         }
 
         // GET: Widget/Delete/5
@@ -124,7 +129,6 @@ namespace Netfx.Controllers
         [HttpPost, ActionName("Delete")]
         [Authorize]
         [ValidateAntiForgeryToken]
-        // #683 - FormCollection
         public ActionResult DeleteConfirmed(int id, FormCollection collection)
         {
             if (!_service.DeleteWidget(id, HttpContext))
