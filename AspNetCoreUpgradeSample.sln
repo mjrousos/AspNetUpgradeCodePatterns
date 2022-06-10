@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32519.111
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Net6", "net6\Net6.csproj", "{D3A8029E-C5F0-4E0C-B936-BA77AD3ED26F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netfx", "netfx\netfx\Netfx.csproj", "{F5D4203B-F3DB-47EB-8171-14B3C990AC60}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netfx", "netfx\Netfx.csproj", "{F5D4203B-F3DB-47EB-8171-14B3C990AC60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
