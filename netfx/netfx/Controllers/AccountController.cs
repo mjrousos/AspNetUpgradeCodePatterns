@@ -1,9 +1,9 @@
-﻿using Netfx.Models;
+﻿using DemoApp.Models;
 using System;
 using System.Web.Mvc;
 using System.Web.Security;
 
-namespace Netfx.Controllers
+namespace DemoApp.Controllers
 {
     public class AccountController : Controller
     {

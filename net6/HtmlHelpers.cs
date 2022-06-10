@@ -1,26 +1,26 @@
-﻿using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
+﻿using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace DemoApp
+namespace Net6
 {
     public static class HtmlHelpers
     {
         // #1158 IHtmlString
-        public static IHtmlString ProfilePicture(this HtmlHelper helper, string url, string userName, object htmlAttributes = null)
+        public static IHtmlContent ProfilePicture(this HtmlHelper helper, string url, string userName, object htmlAttributes = null)
         {
             // #73 TagBuilder
             var builder = new TagBuilder("img");
 
             // #73 TagBuilder.GenerateId
-            builder.GenerateId("profilePicture");
+            builder.GenerateId("profilePicture", "_");
             builder.MergeAttribute("src", url);
             builder.MergeAttribute("alt", $"Profile picture for {helper.Encode(userName)}");
             builder.MergeAttribute("width", "200");
             builder.MergeAttributes(new RouteValueDictionary(htmlAttributes));
 
             // #73 TagBuilder.ToString
-            return new MvcHtmlString(builder.ToString(TagRenderMode.SelfClosing));
+            return builder.RenderSelfClosingTag();
         }
     }
 }

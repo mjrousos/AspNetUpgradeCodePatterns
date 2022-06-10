@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Netfx.Controllers;
+namespace DemoApp.Controllers;
 
 public class ProfilePictureController : Controller
 {

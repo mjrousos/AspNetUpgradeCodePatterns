@@ -1,8 +1,27 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
+    <RootNamespace>DemoApp</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Widgets.csv" />
+	<Content Include="Pics/*" />
+  </ItemGroup>
+
+  <!-- Remove un-migrated files so that the project builds; comment this item group out
+       or rename files to not have a .old suffix to test analyzers on them in the context
+       of an ASP.NET Core app. -->
+  <ItemGroup>
+    <Compile Remove="**/*.old.cs" />
+    <Content Include="**/*.old.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Views\Home\" />
+  </ItemGroup>
 
 </Project>

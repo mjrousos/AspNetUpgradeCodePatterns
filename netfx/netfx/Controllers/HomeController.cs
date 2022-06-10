@@ -1,9 +1,9 @@
-﻿using Netfx.Models;
+﻿using DemoApp.Models;
 using System;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Netfx.Controllers
+namespace DemoApp.Controllers
 {
     public class HomeController : Controller
     {

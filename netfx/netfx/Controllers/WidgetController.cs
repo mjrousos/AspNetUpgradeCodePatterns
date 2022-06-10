@@ -1,9 +1,9 @@
-﻿using Netfx.Models;
-using Netfx.Services;
+﻿using DemoApp.Models;
+using DemoApp.Services;
 using System.Net;
 using System.Web.Mvc;
 
-namespace Netfx.Controllers
+namespace DemoApp.Controllers
 {
     public class WidgetController : Controller
     {
